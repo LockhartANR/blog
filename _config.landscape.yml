@@ -1,0 +1,24 @@
+# landscape 主题的本地覆盖配置。
+#
+# 本文件原先是 0 字节的空文件，因此主题一直使用自己的默认值，其中两项指向
+# 主题自带、但本项目 source/ 下并不存在的文件：
+#
+#   rss: /atom.xml        -> 需要 hexo-generator-feed 才会生成，本项目未安装
+#   favicon: /favicon.png -> 主题 source/ 下没有这个文件
+#
+# 结果：首页 <head> 里出现两个指向不存在资源的引用（已由 blog/build.sh 的
+# 「校验首页引用的本地资源」检出）。这里逐项处理：
+#
+#   rss 置空 —— 主题的 head.ejs 与 header.ejs 都有 `if (theme.rss)` 判断，
+#   置空即完全不渲染该链接，不会留下死链。若日后想要 RSS，先安装
+#   hexo-generator-feed 再把这里改回 /atom.xml。
+#
+#   favicon 保持主题默认的 /favicon.png —— 因为我们已经真的提供了这个文件
+#   （source/favicon.png，由 .dsh-ops/make-favicon.mjs 生成，蓝色圆角方块+白色 L，
+#   与首页图标一致）。Hexo 会把 source/ 下的静态文件复制到 public/。
+#
+# 注意：favicon 不要写成 data URI。主题用 favicon_tag() 渲染，该方法会对路径做
+# url_for 处理，data URI 会被破坏。
+
+rss:
+favicon: /favicon.png
