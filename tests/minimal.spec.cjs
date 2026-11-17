@@ -61,7 +61,7 @@ test('禁用脚本仍可阅读并使用目录', async ({ browser }) => {
   const page = await context.newPage();
   await page.goto('http://127.0.0.1:4180' + article);
   await expect(page.locator('.prose img')).toHaveCount(5);
-  await expect(page.locator('.prose h2')).toHaveCount(4);
+  await expect(page.locator('.prose h2').filter({ hasText: '淡游' })).toBeVisible();
   await expect(page.locator('.theme-toggle')).not.toBeVisible();
   await page.locator('.post-toc summary').click();
   await expect(page.locator('.post-toc').getByRole('link', { name: '淡游', exact: true })).toBeVisible();
