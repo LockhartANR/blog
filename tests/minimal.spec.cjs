@@ -1,12 +1,13 @@
 const { test, expect } = require('@playwright/test');
 const article = '/2026/11/16/sub40/';
+const articleRow = page => page.locator('.post-row').filter({ has: page.locator(`h2 a[href="${article}"]`) });
 test('首页只展示原文摘要和文字列表', async ({ page }) => {
   await page.goto('/');
   await expect(page).toHaveTitle('Lockhart');
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('文章');
-  await expect(page.locator('.post-summary p')).toHaveText('2026年11月9日，下午5:14，在元扫雷达成原教旨sub40，成绩37.701s。');
+  await expect(articleRow(page).locator('.post-summary p')).toHaveText('2026年11月9日，下午5:14，在元扫雷达成原教旨sub40，成绩37.701s。');
   await expect(page.locator('.site-main img')).toHaveCount(0);
-  await page.getByRole('link', { name: '阅读全文' }).click();
+  await articleRow(page).getByRole('link', { name: '阅读全文' }).click();
   await expect(page).toHaveURL(/2026\/11\/16\/sub40/);
 });
 test('完整文章、中文目录与标签链接有效', async ({ page }) => {
@@ -18,7 +19,7 @@ test('完整文章、中文目录与标签链接有效', async ({ page }) => {
   await expect.poll(() => page.evaluate(() => decodeURIComponent(location.hash))).toBe('#淡游');
   await page.locator('.post-meta').getByRole('link', { name: '扫雷' }).click();
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('标签：扫雷');
-  await expect(page.getByRole('link', { name: '阅读全文' })).toBeVisible();
+  await expect(articleRow(page).getByRole('link', { name: '阅读全文' })).toBeVisible();
   await page.getByRole('link', { name: '归档', exact: true }).click();
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('归档');
 });
@@ -71,7 +72,7 @@ test('小屏触摸设备的导航可点击且不溢出', async ({ browser }) => 
   const page = await context.newPage();
   await page.goto('http://127.0.0.1:4180/');
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBeTruthy();
-  await page.getByRole('link', { name: '阅读全文' }).tap();
+  await articleRow(page).getByRole('link', { name: '阅读全文' }).tap();
   await expect(page.locator('.post-header h1')).toHaveText('sub40历程');
   await context.close();
 });
