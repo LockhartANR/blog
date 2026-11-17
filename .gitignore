@@ -1,0 +1,33 @@
+.DS_Store
+Thumbs.db
+db.json
+*.log
+node_modules/
+public/
+.deploy*/
+_multiconfig.yml
+# Local release bundles
+release.zip
+__pycache__/
+source.bundle
+
+# Browser acceptance output
+test-results/
+playwright-report/
+
+# Local secrets and release artifacts
+.env
+.env.*
+!.env.example
+*.db
+*.db-wal
+*.db-shm
+*.sqlite
+*.sqlite3
+*.pem
+*.key
+release.zip
+source.bundle
+.privacy-audit/
+.public-migration/
+__pycache__/

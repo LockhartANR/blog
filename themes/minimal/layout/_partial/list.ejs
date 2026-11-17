@@ -1,0 +1,15 @@
+<div class="post-list">
+<% page.posts.each(function(post) { %>
+  <article class="post-row">
+    <time class="post-date" datetime="<%= date_xml(post.date) %>"><%= date(post.date, 'MM / DD') %></time>
+    <div class="post-summary">
+      <% if (post.tags.length) { %><div class="post-tags"><% post.tags.each(function(tag) { %><a href="<%- url_for(tag.path) %>"><%= tag.name %></a><% }) %></div><% } %>
+      <h2><a href="<%- url_for(post.path) %>"><%= post.title %><span aria-hidden="true">↗</span></a></h2>
+      <p><%= minimal_summary(post) %></p>
+      <a class="read-link" href="<%- url_for(post.path) %>">阅读全文 <span aria-hidden="true">→</span></a>
+    </div>
+  </article>
+<% }) %>
+</div>
+<% if (page.total > 1) { %><nav class="pagination" aria-label="文章分页"><%- paginator({ prev_text: '上一页', next_text: '下一页' }) %></nav><% } %>
+

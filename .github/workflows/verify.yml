@@ -1,0 +1,36 @@
+name: Verify
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: npm ci --no-audit --no-fund
+      - run: npm run build
+      - run: npx playwright install --with-deps chromium
+      - run: npm run test:theme
+      - run: python ops/check_privacy.py
+      - run: python ops/verify.py
+      - run: python -m unittest discover -s ops -p 'test_*.py'
+      - run: python ops/package.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: release
+          path: |
+            release.zip
+            source.bundle
+          if-no-files-found: error
+

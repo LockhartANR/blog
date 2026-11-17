@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="<%= config.language || 'zh-CN' %>">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title><%= page.title ? page.title + ' | ' : '' %><%= config.title %></title>
+  <meta name="description" content="<%= is_post() ? minimal_summary(page) : config.description || '' %>">
+  <link rel="canonical" href="<%= page.permalink || full_url_for(page.path || '/') %>">
+  <link rel="icon" href="<%- url_for('/favicon.png') %>">
+  <script>try{const t=localStorage.getItem('lockhart-theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t}catch{}</script>
+  <link rel="stylesheet" href="<%- url_for('/css/minimal.css') %>">
+  <script src="<%- url_for('/js/minimal.js') %>" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">跳到正文</a>
+  <header class="site-header">
+    <a class="site-name" href="<%- url_for('/') %>">Lockhart</a>
+    <nav aria-label="主导航">
+      <a href="<%- url_for('/') %>" <% if (is_home() || is_post()) { %>aria-current="page"<% } %>>文章</a>
+      <a href="<%- url_for('/archives/') %>" <% if (is_archive()) { %>aria-current="page"<% } %>>归档</a>
+      <a href="<%= theme.github %>" target="_blank" rel="noopener noreferrer">GitHub <span aria-hidden="true">↗</span></a>
+      <button class="theme-toggle" type="button" aria-label="切换明暗外观" aria-pressed="false" hidden><span aria-hidden="true">◐</span></button>
+    </nav>
+  </header>
+  <main id="main" class="site-main"><%- body %></main>
+  <footer class="site-footer">© <%= date(Date.now(), 'YYYY') %> Lockhart</footer>
+  <dialog class="image-viewer" aria-label="查看图片原图">
+    <button type="button" class="image-close" autofocus>关闭 <span aria-hidden="true">×</span></button>
+    <div class="image-scroll"><img alt=""></div>
+    <p class="image-caption"></p>
+  </dialog>
+</body>
+</html>
+
