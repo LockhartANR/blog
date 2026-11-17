@@ -28,7 +28,7 @@ for rel in git('ls-files','-z').decode().strip('\0').split('\0'):
         if re.search(pattern,text): problems.append(rel+': '+label)
 
 for email in git('log','--all','--format=%ae%n%ce').decode().splitlines():
-    if not email.lower().endswith('@users.noreply.github.com'):
+    if not (email.lower().endswith('@users.noreply.github.com') or email.lower() == 'noreply@github.com'):
         problems.append('commit identity must use a GitHub noreply address')
 if problems:
     print('\n'.join(sorted(set(problems))))
